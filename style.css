@@ -1,6 +1,6 @@
 body {
   font-family: 'Arial', sans-serif;
-  background-color: #fff8c5; /* amarelo clarinho */
+  background-color: #fff8c5;
   margin: 0;
   padding: 0;
   display: flex;
@@ -10,7 +10,7 @@ body {
 }
 
 .container {
-  background: #fff176; /* amarelo mais vivo */
+  background: #fff176;
   padding: 30px;
   border-radius: 12px;
   box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
