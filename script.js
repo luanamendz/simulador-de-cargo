@@ -1,22 +1,89 @@
-document.getElementById('quizForm').addEventListener('submit', function (e) {
-  e.preventDefault();
+const perguntas = [
+  {
+    texto: "☕ Qual seu café preferido?",
+    opcoes: ["Café preto da firma", "Cappuccino com espuma de status", "O que tiver de graça"]
+  },
+  {
+    texto: "🖥️ Qual sua habilidade mais afiada?",
+    opcoes: ["Fingir que estou ocupado", "Traduzir termos em inglês", "Resolver pepino dos outros"]
+  },
+  {
+    texto: "📎 O que nunca pode faltar no seu dia?",
+    opcoes: ["Planilha que ninguém entende", "Grupo do zap silenciado", "Cadeira giratória"]
+  },
+  {
+    texto: "📆 Você organiza sua agenda com:",
+    opcoes: ["Post-it", "Google Calendar que nunca abre", "Na cabeça mesmo"]
+  },
+  {
+    texto: "🤔 Qual sua reação a um problema urgente?",
+    opcoes: ["Ignorar e esperar sumir", "Encaminhar pra alguém", "Abrir reunião"]
+  },
+  {
+    texto: "🎉 Qual seu talento oculto na firma?",
+    opcoes: ["Decorar aniversários", "Fugir de tarefas", "Aparecer só em festas"]
+  }
+];
 
-  const respostas = ['q1', 'q2', 'q3'].map(q => {
-    const marcada = document.querySelector(`input[name="${q}"]:checked`);
-    return marcada ? parseInt(marcada.value) : 0;
-  });
+// Todas as 729 combinações possíveis seriam impraticáveis aqui, então exemplo com algumas:
+const mapaResultados = {
+  "111111": "🪑 Você é Estagiário Vitalício com cadeira cativa no RH.",
+  "123321": "🎯 Você é Especialista em Resolver o Que Você Mesmo Causou.",
+  "321123": "🎭 Você é Diretor de Improviso e Gambiarra Corporativa.",
+  "222222": "🧙 Você é Consultor Místico de Processos Invisíveis.",
+  "333333": "🦄 Você é Vice-Presidente de Ilusões e Crachás Holográficos.",
+  // Adicione mais combinações aqui...
+};
 
-  const soma = respostas.reduce((acc, val) => acc + val, 0);
+let etapa = 0;
+let respostas = "";
 
-  let cargo = "";
+const perguntaEl = document.getElementById("pergunta");
+const opcoesEl = document.getElementById("opcoes");
+const botao = document.getElementById("botao");
+const resultadoEl = document.getElementById("resultado");
 
-  if (soma <= 4) {
-    cargo = "Estagiário nível sênior com permissão pra usar a impressora";
-  } else if (soma <= 6) {
-    cargo = "Analista pleno com domínio em enrolação estratégica";
+botao.addEventListener("click", () => {
+  if (etapa === 0) {
+    mostrarPergunta();
+    botao.textContent = "Seguinte";
+  } else if (etapa <= perguntas.length) {
+    const selecionado = document.querySelector("input[name='opcao']:checked");
+    if (selecionado) {
+      respostas += selecionado.value;
+      mostrarPergunta();
+    } else {
+      alert("Escolhe uma opção aí, chefia!");
+    }
   } else {
-    cargo = "Diretor de tretas operacionais e cafés importantes";
+    mostrarResultado();
+  }
+});
+
+function mostrarPergunta() {
+  if (etapa >= perguntas.length) {
+    etapa++;
+    mostrarResultado();
+    return;
   }
 
-  document.getElementById('resultado').innerText = `🚀 Seu cargo é: ${cargo}`;
-});
+  const atual = perguntas[etapa];
+  perguntaEl.textContent = atual.texto;
+  opcoesEl.innerHTML = "";
+
+  atual.opcoes.forEach((op, idx) => {
+    opcoesEl.innerHTML += `
+      <label>
+        <input type="radio" name="opcao" value="${idx + 1}">
+        ${op}
+      </label><br>`;
+  });
+
+  etapa++;
+}
+
+function mostrarResultado() {
+  document.getElementById("quiz").style.display = "none";
+  const resultado = mapaResultados[respostas] || "📎 Você é Consultor de Nada com Acesso Total ao Café.";
+  resultadoEl.textContent = resultado;
+}
