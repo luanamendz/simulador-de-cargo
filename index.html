@@ -1,38 +1,21 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Simulador de Cargo</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <h1>🧠 Qual cargo você merece na firma?</h1>
-  <form id="quizForm">
-    <div class="question">
-      <p>1️⃣ Qual seu café preferido?</p>
-      <label><input type="radio" name="q1" value="1"> Café preto forte</label><br>
-      <label><input type="radio" name="q1" value="2"> Cappuccino com chantilly</label><br>
-      <label><input type="radio" name="q1" value="3"> Qualquer um grátis</label>
+  <div class="container">
+    <h1>🧮 Qual cargo você merece na firma?</h1>
+    <div id="quiz">
+      <p id="pergunta">Clique em "Começar" para descobrir!</p>
+      <div id="opcoes"></div>
     </div>
-
-    <div class="question">
-      <p>2️⃣ Qual sua habilidade mais afiada?</p>
-      <label><input type="radio" name="q2" value="1"> Fingir que estou ocupado</label><br>
-      <label><input type="radio" name="q2" value="2"> Decorar jargões corporativos</label><br>
-      <label><input type="radio" name="q2" value="3"> Resolver pepino dos outros</label>
-    </div>
-
-    <div class="question">
-      <p>3️⃣ Qual seu espírito animal na firma?</p>
-      <label><input type="radio" name="q3" value="1"> Pombo do centro</label><br>
-      <label><input type="radio" name="q3" value="2"> Gato que aparece só pra reunião</label><br>
-      <label><input type="radio" name="q3" value="3"> Galinha caótica</label>
-    </div>
-
-    <button type="submit">Descobrir meu cargo</button>
-  </form>
-
-  <div id="resultado"></div>
+    <button id="botao">Começar</button>
+    <div id="resultado" class="resultado"></div>
+  </div>
 
   <script src="script.js"></script>
 </body>
