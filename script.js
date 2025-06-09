@@ -1,89 +1,116 @@
 const perguntas = [
   {
-    texto: "☕ Qual seu café preferido?",
-    opcoes: ["Café preto da firma", "Cappuccino com espuma de status", "O que tiver de graça"]
+    texto: "Qual seu superpoder na firma?",
+    opcoes: {
+      a: "Fingir que entende o Excel",
+      b: "Sobreviver a reuniões",
+      c: "Decorar a mesa com plantinhas"
+    }
   },
   {
-    texto: "🖥️ Qual sua habilidade mais afiada?",
-    opcoes: ["Fingir que estou ocupado", "Traduzir termos em inglês", "Resolver pepino dos outros"]
+    texto: "Qual seu lanche favorito no escritório?",
+    opcoes: {
+      a: "Bolacha de café passado",
+      b: "Pipoca misteriosa do RH",
+      c: "Restos do aniversário do mês"
+    }
   },
   {
-    texto: "📎 O que nunca pode faltar no seu dia?",
-    opcoes: ["Planilha que ninguém entende", "Grupo do zap silenciado", "Cadeira giratória"]
+    texto: "Como você reage a e-mails em caps lock?",
+    opcoes: {
+      a: "Responde com emoji passivo-agressivo",
+      b: "Ignora solenemente",
+      c: "Encaminha pro estagiário"
+    }
   },
   {
-    texto: "📆 Você organiza sua agenda com:",
-    opcoes: ["Post-it", "Google Calendar que nunca abre", "Na cabeça mesmo"]
+    texto: "Sua mesa está:",
+    opcoes: {
+      a: "Impecável (pelo menos hoje)",
+      b: "Caótica, como minha alma",
+      c: "Com 3 canecas e nenhuma limpa"
+    }
   },
   {
-    texto: "🤔 Qual sua reação a um problema urgente?",
-    opcoes: ["Ignorar e esperar sumir", "Encaminhar pra alguém", "Abrir reunião"]
+    texto: "Você foi escolhido pra:",
+    opcoes: {
+      a: "Organizar o amigo oculto",
+      b: "Treinar o novo contratado",
+      c: "Segurar a porta com o pé"
+    }
   },
   {
-    texto: "🎉 Qual seu talento oculto na firma?",
-    opcoes: ["Decorar aniversários", "Fugir de tarefas", "Aparecer só em festas"]
+    texto: "Seu talento secreto na firma é:",
+    opcoes: {
+      a: "Evitar ligações",
+      b: "Fugir de aglomeração na copa",
+      c: "Decorar a senha do Wi-Fi"
+    }
   }
 ];
 
-// Todas as 729 combinações possíveis seriam impraticáveis aqui, então exemplo com algumas:
 const mapaResultados = {
-  "111111": "🪑 Você é Estagiário Vitalício com cadeira cativa no RH.",
-  "123321": "🎯 Você é Especialista em Resolver o Que Você Mesmo Causou.",
-  "321123": "🎭 Você é Diretor de Improviso e Gambiarra Corporativa.",
-  "222222": "🧙 Você é Consultor Místico de Processos Invisíveis.",
-  "333333": "🦄 Você é Vice-Presidente de Ilusões e Crachás Holográficos.",
-  // Adicione mais combinações aqui...
+  "aaaaaa": "📎 Você é Estagiário Nível Sênior com permissão pra usar a impressora. Mas não fique triste, o café é de graça (quase sempre).",
+  "aaaabb": "🧻 Você é Gerente de Papelaria da Firma. Pelo menos ninguém mexe nas suas canetas.",
+  "abcabc": "🧹 Você é Coordenador de Reuniões que Podiam Ser Email. Pelo menos tem ar-condicionado.",
+  "cccccc": "🗂️ Você é Analista de Assuntos Aleatórios. Mas ei, alguém precisa decidir a cor da planilha.",
+  // Adicione aqui os outros 725 resultados com frases engraçadas!
 };
 
-let etapa = 0;
+let indicePergunta = 0;
 let respostas = "";
-
 const perguntaEl = document.getElementById("pergunta");
 const opcoesEl = document.getElementById("opcoes");
 const botao = document.getElementById("botao");
 const resultadoEl = document.getElementById("resultado");
 
 botao.addEventListener("click", () => {
-  if (etapa === 0) {
+  const selecionado = document.querySelector('input[name="opcao"]:checked');
+
+  if (botao.textContent === "Começar") {
     mostrarPergunta();
     botao.textContent = "Seguinte";
-  } else if (etapa <= perguntas.length) {
-    const selecionado = document.querySelector("input[name='opcao']:checked");
-    if (selecionado) {
-      respostas += selecionado.value;
-      mostrarPergunta();
-    } else {
-      alert("Escolhe uma opção aí, chefia!");
-    }
+    return;
+  }
+
+  if (!selecionado) {
+    alert("Escolha uma opção!");
+    return;
+  }
+
+  respostas += selecionado.value;
+  indicePergunta++;
+
+  if (indicePergunta < perguntas.length) {
+    mostrarPergunta();
   } else {
     mostrarResultado();
+    botao.style.display = "none"; // Esconde o botão após a última pergunta
   }
 });
 
 function mostrarPergunta() {
-  if (etapa >= perguntas.length) {
-    etapa++;
-    mostrarResultado();
-    return;
-  }
-
-  const atual = perguntas[etapa];
-  perguntaEl.textContent = atual.texto;
+  const perguntaAtual = perguntas[indicePergunta];
+  perguntaEl.textContent = perguntaAtual.texto;
   opcoesEl.innerHTML = "";
 
-  atual.opcoes.forEach((op, idx) => {
+  for (const [letra, texto] of Object.entries(perguntaAtual.opcoes)) {
+    const id = `opcao-${letra}`;
     opcoesEl.innerHTML += `
-      <label>
-        <input type="radio" name="opcao" value="${idx + 1}">
-        ${op}
-      </label><br>`;
-  });
-
-  etapa++;
+      <label><input type="radio" name="opcao" value="${letra}" id="${id}" /> ${texto}</label>
+    `;
+  }
 }
 
 function mostrarResultado() {
   document.getElementById("quiz").style.display = "none";
-  const resultado = mapaResultados[respostas] || "📎 Você é Consultor de Nada com Acesso Total ao Café.";
-  resultadoEl.textContent = resultado;
+  const resultado = mapaResultados[respostas] || "📎 Você é Consultor de Nada com Crachá que não abre nenhuma porta. Mas relaxa, o café ainda é café.";
+
+  resultadoEl.innerHTML = `
+    ${resultado}<br><br><small>Redirecionando para o início...</small>
+  `;
+
+  setTimeout(() => {
+    window.location.href = "https://afirma.softr.app";
+  }, 5000);
 }
